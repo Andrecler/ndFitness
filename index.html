@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&N - Sua Loja de Roupas Fitness</title>
+    <title>DNL - Sua Loja de Roupas Fitness</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -39,6 +39,19 @@
                 transform: translateX(0);
             }
         }
+        .toast-enter {
+            animation: toastIn 0.5s ease forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body class="bg-violet-50 text-gray-800">
@@ -46,7 +59,7 @@
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-gray-800 flex items-center">
+			<a href="#" class="text-2xl font-bold text-gray-800 flex items-center">
                 <img src="img/logo.png" alt="Logo" class="h-32">
             </a>
             <div class="hidden md:flex items-center space-x-6">
@@ -54,12 +67,13 @@
                 <a href="#produtos" class="text-gray-600 hover:text-pink-500 transition duration-300">Produtos</a>
                 <a href="#sobre" class="text-gray-600 hover:text-pink-500 transition duration-300">Sobre</a>
                 <a href="#contato" class="text-gray-600 hover:text-pink-500 transition duration-300">Contato</a>
-            </div>
+			</div>
+			
             <div class="flex items-center">
-                <button id="cart-button" class="relative text-gray-600 hover:text-pink-500 transition duration-300 focus:outline-none">
-                    <i class="fas fa-shopping-cart text-xl"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-3 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                </button>
+				<button id="cart-button" class="relative text-gray-600 hover:text-pink-500 transition duration-300 focus:outline-none">
+					<i class="fas fa-shopping-cart text-xl"></i>
+					<span id="cart-count" class="absolute -top-2 -right-3 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+				</button>
             </div>
         </nav>
     </header>
@@ -94,7 +108,7 @@
                     <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?q=80&w=2070&auto=format&fit=crop" alt="Pessoas se exercitando" class="rounded-lg shadow-lg">
                 </div>
                 <div class="md:w-1/2">
-                    <h2 class="text-3xl font-bold mb-4 text-purple-800">Sobre a D&N</h2>
+                    <h2 class="text-3xl font-bold mb-4 text-purple-800">Sobre a DNL</h2>
                     <p class="text-gray-600 mb-4">
                         Nascemos da paixão pelo esporte e pela moda. Acreditamos que a roupa certa pode transformar seu treino, oferecendo não apenas performance, mas também confiança e estilo.
                     </p>
@@ -138,7 +152,7 @@
             <div class="mb-4">
                 <a href="#" class="text-xl font-bold flex items-center justify-center">
                     <i class="fas fa-dumbbell text-pink-400 mr-2"></i>
-                    <span class="text-pink-400">D&N</span>
+                    <span class="text-pink-400">DNL</span>
                 </a>
             </div>
             <div class="flex justify-center space-x-6 mb-6">
@@ -147,7 +161,7 @@
                 <a href="#" class="hover:text-white transition duration-300"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="hover:text-white transition duration-300"><i class="fab fa-whatsapp"></i></a>
             </div>
-            <p class="text-purple-200">&copy; 2024 D&N. Todos os direitos reservados.</p>
+            <p class="text-purple-200">&copy; 2024 DNL. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -162,7 +176,6 @@
             
             <!-- Cart Items -->
             <div id="cart-items" class="flex-grow p-4 overflow-y-auto">
-                <!-- Cart items will be injected here -->
                 <p id="cart-empty-message" class="text-gray-500">Seu carrinho está vazio.</p>
             </div>
             
@@ -172,23 +185,138 @@
                     <span>Total:</span>
                     <span id="cart-total" class="text-purple-800">R$ 0,00</span>
                 </div>
-                <button class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-lg transition duration-300">Finalizar Compra</button>
+                <button id="checkout-button" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-lg transition duration-300">Finalizar Compra</button>
             </div>
         </div>
     </div>
+
+    <!-- Payment Confirmation Modal -->
+    <div id="payment-confirmation-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6 text-center">
+            <h3 class="text-2xl font-bold text-purple-800 mb-4">Revisão do Pedido</h3>
+            <div id="order-summary" class="text-left mb-6 border-b pb-4">
+                <!-- Order summary will be injected here -->
+            </div>
+            <p class="text-gray-600 mb-6">Em um site real, você seria redirecionado para uma plataforma de pagamento segura (como Mercado Pago ou PagSeguro) para completar a sua compra.</p>
+            <div class="flex justify-center gap-4">
+                <button id="confirm-payment-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">Confirmar Pedido</button>
+                <button id="cancel-payment-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg transition duration-300">Cancelar</button>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Botão de Cadastro + Seção de Formulário -->
+<section id="cadastro" class="py-16 bg-white">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+      <form id="cadastroForm" class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="block text-sm font-medium">Nome Completo</label>
+          <input name="nome" type="text" class="mt-1 w-full rounded border-gray-300 shadow-sm" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">CPF</label>
+          <input id="cpf" name="cpf" type="text" class="mt-1 w-full rounded border-gray-300 shadow-sm" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">CEP</label>
+          <input id="cep" name="cep" type="text" class="mt-1 w-full rounded border-gray-300 shadow-sm" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Endereço</label>
+          <input id="endereco" name="endereco" type="text" class="mt-1 w-full rounded border-gray-300 shadow-sm" required />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium">Complemento</label>
+            <input name="complemento" type="text" class="mt-1 w-full rounded border-gray-300 shadow-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Número</label>
+            <input name="numero" type="text" class="mt-1 w-full rounded border-gray-300 shadow-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Telefone</label>
+          <input id="telefone" name="telefone" type="tel" class="mt-1 w-full rounded border-gray-300 shadow-sm" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input name="email" type="email" class="mt-1 w-full rounded border-gray-300 shadow-sm" required />
+        </div>
+        <div class="text-center">
+          <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+</section>
+
+<!-- Scripts para Máscaras e ViaCEP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.4.2/imask.min.js"></script>
+<script>
+  const cpfMask = IMask(document.getElementById("cpf"), { mask: "000.000.000-00" });
+  const cepMask = IMask(document.getElementById("cep"), { mask: "00000-000" });
+  const telefoneMask = IMask(document.getElementById("telefone"), {
+    mask: [{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]
+  });
+
+  document.getElementById("cep").addEventListener("blur", function () {
+    const cep = this.value.replace(/\D/g, "");
+    if (cep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.erro) {
+            document.getElementById("endereco").value = `${data.logradouro} - ${data.bairro}, ${data.localidade} - ${data.uf}`;
+          } else {
+            alert("CEP não encontrado.");
+          }
+        })
+        .catch(() => alert("Erro ao buscar o CEP."));
+    }
+  });
+
+  document.getElementById("cadastroForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Cliente cadastrado com sucesso!");
+    this.reset();
+  });
+</script>
+
+<!-- Botões de Cadastro e Login no Header -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.querySelector('header nav .flex.items-center');
+    if (nav) {
+      const cadastroBtn = document.createElement('a');
+      cadastroBtn.href = "#cadastro";
+      cadastroBtn.textContent = "Cadastro";
+      cadastroBtn.className = "ml-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-500 transition";
+
+      const loginBtn = document.createElement('a');
+      loginBtn.href = "#login";
+      loginBtn.textContent = "Login";
+      loginBtn.className = "ml-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-500 transition";
+
+      nav.appendChild(cadastroBtn);
+      nav.appendChild(loginBtn);
+    }
+  });
+</script>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- STATE ---
             const products = [
-                { id: 1, name: 'Legging Performance', price: 149.90, img: 'img/leggin.png' },
-                { id: 2, name: 'Top Esportivo Impacto', price: 89.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Top' },
-                { id: 3, name: 'Camiseta Dry Fit', price: 79.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Camiseta' },
-                { id: 4, name: 'Shorts de Corrida', price: 99.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Shorts' },
-                { id: 5, name: 'Regata Machão', price: 69.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Regata' },
-                { id: 6, name: 'Jaqueta Corta-vento', price: 199.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Jaqueta' },
-                { id: 7, name: 'Meia de Compressão', price: 49.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Meia' },
-                { id: 8, name: 'Tênis de Treino', price: 349.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Tênis' },
+                { id: 1, name: 'Legging Performance', price: 149.90, img: 'img/legging.png' },
+				{ id: 2, name: 'Top Esportivo Impacto', price: 89.90, img: 'img/top.png' },
+                { id: 3, name: 'Camiseta Dry Fit', price: 79.90, img: 'img/dry.png' },
+                { id: 4, name: 'Shorts de Corrida', price: 99.90, img: 'img/short.png' },
+                //{ id: 5, name: 'Regata Machão', price: 69.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Regata' },
+                //{ id: 6, name: 'Jaqueta Corta-vento', price: 199.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Jaqueta' },
+                //{ id: 7, name: 'Meia de Compressão', price: 49.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Meia' },
+                //{ id: 8, name: 'Tênis de Treino', price: 349.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Tênis' },
             ];
             let cart = [];
 
@@ -201,19 +329,21 @@
             const cartCount = document.getElementById('cart-count');
             const cartTotal = document.getElementById('cart-total');
             const cartEmptyMessage = document.getElementById('cart-empty-message');
+            const checkoutButton = document.getElementById('checkout-button');
+            const paymentConfirmationModal = document.getElementById('payment-confirmation-modal');
+            const orderSummaryContainer = document.getElementById('order-summary');
+            const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+            const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
+
 
             // --- FUNCTIONS ---
 
-            // Format number to BRL currency
-            const formatCurrency = (value) => {
-                return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            };
+            const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-            // Render all products on the page
             const renderProducts = () => {
                 productList.innerHTML = '';
                 products.forEach(product => {
-                    const productCard = `
+                    productList.innerHTML += `
                         <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
                             <img src="${product.img}" alt="${product.name}" class="w-full h-64 object-cover">
                             <div class="p-6">
@@ -223,48 +353,38 @@
                                     <i class="fas fa-cart-plus mr-2"></i> Adicionar ao Carrinho
                                 </button>
                             </div>
-                        </div>
-                    `;
-                    productList.innerHTML += productCard;
+                        </div>`;
                 });
             };
 
-            // Render items in the cart modal
             const renderCart = () => {
                 cartItemsContainer.innerHTML = '';
-                if (cart.length === 0) {
-                    cartEmptyMessage.classList.remove('hidden');
-                } else {
-                    cartEmptyMessage.classList.add('hidden');
-                    cart.forEach(item => {
-                        const cartItemElement = document.createElement('div');
-                        cartItemElement.className = 'flex justify-between items-center mb-4 p-2 rounded-lg bg-violet-50 cart-item-enter';
-                        cartItemElement.innerHTML = `
-                            <div class="flex items-center">
-                                <img src="${item.img}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover mr-4">
-                                <div>
-                                    <p class="font-semibold">${item.name}</p>
-                                    <p class="text-gray-600">${formatCurrency(item.price)}</p>
-                                </div>
+                cartEmptyMessage.classList.toggle('hidden', cart.length > 0);
+
+                cart.forEach(item => {
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.className = 'flex justify-between items-center mb-4 p-2 rounded-lg bg-violet-50 cart-item-enter';
+                    cartItemElement.innerHTML = `
+                        <div class="flex items-center">
+                            <img src="${item.img}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover mr-4">
+                            <div>
+                                <p class="font-semibold">${item.name}</p>
+                                <p class="text-gray-600">${formatCurrency(item.price)}</p>
                             </div>
-                            <div class="flex items-center gap-4">
-                               <div class="flex items-center border rounded">
-                                    <button data-id="${item.id}" class="quantity-change decrease-btn px-2 py-1">-</button>
-                                    <span class="px-2">${item.quantity}</span>
-                                    <button data-id="${item.id}" class="quantity-change increase-btn px-2 py-1">+</button>
-                               </div>
-                                <button data-id="${item.id}" class="remove-from-cart-btn text-red-500 hover:text-red-700">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        `;
-                        cartItemsContainer.appendChild(cartItemElement);
-                    });
-                }
+                        </div>
+                        <div class="flex items-center gap-4">
+                           <div class="flex items-center border rounded">
+                                <button data-id="${item.id}" class="quantity-change decrease-btn px-2 py-1">-</button>
+                                <span class="px-2">${item.quantity}</span>
+                                <button data-id="${item.id}" class="quantity-change increase-btn px-2 py-1">+</button>
+                           </div>
+                            <button data-id="${item.id}" class="remove-from-cart-btn text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                        </div>`;
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
                 updateCartInfo();
             };
 
-            // Update cart count and total price
             const updateCartInfo = () => {
                 const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
                 const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -272,11 +392,9 @@
                 cartTotal.textContent = formatCurrency(totalPrice);
             };
 
-            // Add item to cart
             const addToCart = (productId) => {
                 const product = products.find(p => p.id === productId);
                 const cartItem = cart.find(item => item.id === productId);
-
                 if (cartItem) {
                     cartItem.quantity++;
                 } else {
@@ -285,62 +403,80 @@
                 renderCart();
             };
             
-            // Remove item from cart
             const removeFromCart = (productId) => {
                 cart = cart.filter(item => item.id !== productId);
                 renderCart();
             };
 
-            // Change item quantity
             const changeQuantity = (productId, change) => {
                  const cartItem = cart.find(item => item.id === productId);
                  if (cartItem) {
                      cartItem.quantity += change;
-                     if (cartItem.quantity <= 0) {
-                         removeFromCart(productId);
-                     } else {
-                         renderCart();
-                     }
+                     if (cartItem.quantity <= 0) removeFromCart(productId);
+                     else renderCart();
                  }
             };
 
-            // Toggle cart modal visibility
-            const toggleCartModal = () => {
-                cartModal.classList.toggle('hidden');
+            const toggleCartModal = () => cartModal.classList.toggle('hidden');
+
+            const showToast = (message, isSuccess = true) => {
+                const toast = document.createElement('div');
+                const bgColor = isSuccess ? 'bg-green-500' : 'bg-red-500';
+                toast.className = `fixed top-5 right-5 ${bgColor} text-white py-2 px-4 rounded-lg shadow-lg toast-enter z-50`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => document.body.removeChild(toast), 3000);
+            };
+            
+            const processCheckout = () => {
+                if (cart.length === 0) {
+                    showToast("Seu carrinho está vazio!", false);
+                    return;
+                }
+                toggleCartModal();
+                let summaryHtml = '<ul class="space-y-2">';
+                cart.forEach(item => {
+                    summaryHtml += `<li class="flex justify-between"><span>${item.quantity}x ${item.name}</span> <span>${formatCurrency(item.price * item.quantity)}</span></li>`;
+                });
+                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                summaryHtml += `</ul><hr class="my-4"><div class="flex justify-between font-bold text-lg"><p>Total:</p><p>${formatCurrency(totalPrice)}</p></div>`;
+                orderSummaryContainer.innerHTML = summaryHtml;
+                paymentConfirmationModal.classList.remove('hidden');
+            };
+
+            const confirmPurchase = () => {
+                paymentConfirmationModal.classList.add('hidden');
+                cart = [];
+                renderCart();
+                showToast("Pedido recebido com sucesso!");
             };
 
             // --- EVENT LISTENERS ---
-            productList.addEventListener('click', (e) => {
+            productList.addEventListener('click', e => {
                 if (e.target.closest('.add-to-cart-btn')) {
-                    const button = e.target.closest('.add-to-cart-btn');
-                    const productId = parseInt(button.dataset.id);
-                    addToCart(productId);
+                    addToCart(parseInt(e.target.closest('.add-to-cart-btn').dataset.id));
                 }
             });
 
-            cartItemsContainer.addEventListener('click', (e) => {
+            cartItemsContainer.addEventListener('click', e => {
                 const removeBtn = e.target.closest('.remove-from-cart-btn');
                 const quantityBtn = e.target.closest('.quantity-change');
-
-                if (removeBtn) {
-                    const productId = parseInt(removeBtn.dataset.id);
-                    removeFromCart(productId);
-                }
-                
+                if (removeBtn) removeFromCart(parseInt(removeBtn.dataset.id));
                 if (quantityBtn) {
-                    const productId = parseInt(quantityBtn.dataset.id);
-                    const isIncrease = quantityBtn.classList.contains('increase-btn');
-                    changeQuantity(productId, isIncrease ? 1 : -1);
+                    const change = quantityBtn.classList.contains('increase-btn') ? 1 : -1;
+                    changeQuantity(parseInt(quantityBtn.dataset.id), change);
                 }
             });
 
             cartButton.addEventListener('click', toggleCartModal);
             closeCartButton.addEventListener('click', toggleCartModal);
-            cartModal.addEventListener('click', (e) => {
-                if (e.target === cartModal) {
-                    toggleCartModal();
-                }
+            cartModal.addEventListener('click', e => {
+                if (e.target === cartModal) toggleCartModal();
             });
+            
+            checkoutButton.addEventListener('click', processCheckout);
+            confirmPaymentBtn.addEventListener('click', confirmPurchase);
+            cancelPaymentBtn.addEventListener('click', () => paymentConfirmationModal.classList.add('hidden'));
 
             // --- INITIALIZATION ---
             renderProducts();
