@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNL - Sua Loja de Roupas Fitness</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.4.2/imask.min.js"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .cart-item-enter {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .toast-enter {
+            animation: toastIn 0.5s ease forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-violet-50 text-gray-800">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class=" container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-800 flex items-center">
+                <img src="/img/logo.png" alt="Logo" class="h-32">
+            </a>
+
+             <form id="logoutForm" method="POST">
+                <div id="boasvindas" class="block text-lg font-bold mb-1 text-purple-800">
+                </div>
+                <button id="sairBtn" type="submit" class="px-6 py-2 text-sm font-semibold text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all">
+                     Sair
+                 </button>
+             </form>
+         
+
+            <form id="loginForm" method="POST">
+                <div id="loginDiv" class="hidden flex-col items-center space-y-4 p-6 border border-gray-300 rounded-lg shadow-lg">
+                    <div class="w-full">
+                        <label for="cpf" class="block text-sm font-bold mb-1 text-purple-800">CPF:</label>
+                        <input id="cpf" name="cpf" type="text" required class="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+                    </div>
+
+                    <div class="w-full">
+                        <label for="senha" class="block text-sm font-bold mb-1 text-purple-800">Senha:</label>
+                        <input id="senha" name="senha" type="password" required class="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+                    </div>
+                    
+                    <button type="submit" class="w-full px-6 py-2 text-sm font-semibold text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all">
+                        Entrar
+                    </button>
+                </div>
+            </form>
+            
+            
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#home" class="text-gray-600 hover:text-pink-500 transition duration-300">Início</a>
+                <a href="#produtos" class="text-gray-600 hover:text-pink-500 transition duration-300">Produtos</a>
+                <a href="#sobre" class="text-gray-600 hover:text-pink-500 transition duration-300">Sobre</a>
+                <a href="#contato" class="text-gray-600 hover:text-pink-500 transition duration-300">Contato</a>
+			</div>
+			
+            <div class="flex items-center">
+				<button id="cart-button" class="relative text-gray-600 hover:text-pink-500 transition duration-300 focus:outline-none">
+					<i class="fas fa-shopping-cart text-xl"></i>
+					<span id="cart-count" class="absolute -top-2 -right-3 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+				</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg text-white">
+            <div class="bg-black bg-opacity-50 h-96 flex items-center">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Performance e Estilo</h1>
+                    <p class="text-lg md:text-xl mb-8">As melhores roupas para o seu treino, com a tecnologia e o conforto que você merece.</p>
+                    <a href="#produtos" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">Ver Produtos</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="produtos" class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-10 text-purple-800">Nossos Produtos</h2>
+                <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Products will be injected here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="sobre" class="bg-white py-16">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?q=80&w=2070&auto=format&fit=crop" alt="Pessoas se exercitando" class="rounded-lg shadow-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold mb-4 text-purple-800">Sobre a DNL</h2>
+                    <p class="text-gray-600 mb-4">
+                        Nascemos da paixão pelo esporte e pela moda. Acreditamos que a roupa certa pode transformar seu treino, oferecendo não apenas performance, mas também confiança e estilo.
+                    </p>
+                    <p class="text-gray-600">
+                        Nossas peças são desenvolvidas com tecidos tecnológicos de alta qualidade, garantindo durabilidade, conforto e um caimento perfeito. Junte-se a nós e eleve sua experiência fitness.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contato" class="py-16">
+             <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-10 text-purple-800">Fale Conosco</h2>
+                <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+                    <form>
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Nome</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Seu nome completo">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="seu.email@exemplo.com">
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Mensagem</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Como podemos ajudar?"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">Enviar Mensagem</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-purple-900 text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                <a href="#" class="text-xl font-bold flex items-center justify-center">
+                    <i class="fas fa-dumbbell text-pink-400 mr-2"></i>
+                    <span class="text-pink-400">DNL</span>
+                </a>
+            </div>
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="hover:text-white transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-white transition duration-300"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-white transition duration-300"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-white transition duration-300"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p class="text-purple-200">&copy; 2024 DNL. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-lg flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-xl font-bold text-purple-800">Seu Carrinho</h3>
+                <button id="close-cart-button" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            
+            <!-- Cart Items -->
+            <div id="cart-items" class="flex-grow p-4 overflow-y-auto">
+                <p id="cart-empty-message" class="text-gray-500">Seu carrinho está vazio.</p>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 border-t bg-gray-50">
+                <div class="flex justify-between items-center font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total" class="text-purple-800">R$ 0,00</span>
+                </div>
+                <button id="checkout-button" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-lg transition duration-300">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Confirmation Modal -->
+    <div id="payment-confirmation-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6 text-center">
+            <h3 class="text-2xl font-bold text-purple-800 mb-4">Revisão do Pedido</h3>
+            <div id="order-summary" class="text-left mb-6 border-b pb-4">
+                <!-- Order summary will be injected here -->
+            </div>
+            <p class="text-gray-600 mb-6">Em um site real, você seria redirecionado para uma plataforma de pagamento segura (como Mercado Pago ou PagSeguro) para completar a sua compra.</p>
+            <div class="flex justify-center gap-4">
+                <button id="confirm-payment-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">Confirmar Pedido</button>
+                <button id="cancel-payment-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg transition duration-300">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+<!-- Botões de Cadastro e Login no Header -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cpfMask = IMask(document.getElementById("cpf"), { mask: "000.000.000-00" });
+
+    const nav = document.querySelector('header nav .flex.items-center');
+    if (nav) {
+      const cadastroBtn = document.createElement('a');
+      cadastroBtn.id = "cadastroBtn";
+      cadastroBtn.href = "cadastro.html";
+      cadastroBtn.textContent = "Cadastro";
+      cadastroBtn.className = "ml-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-500 transition";
+
+        const loginBtn = document.createElement('a');
+        loginBtn.id = "loginBtn";
+       // loginBtn.href = "login.html";
+        loginBtn.textContent = "Login";
+        loginBtn.className = "ml-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-500 transition";
+      
+        const loginDiv = document.getElementById('loginDiv');
+
+        // Adiciona um event listener para o clique
+        loginBtn.addEventListener('click', function(event) {
+            loginDiv.classList.toggle('hidden');
+        });
+        
+        nav.appendChild(cadastroBtn);
+        nav.appendChild(loginBtn);
+        sairBtn.hidden = true;
+    }
+  });
+</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE ---
+            const products = [
+                { id: 1, name: 'Legging Performance', price: 149.90, img: '/img/legging.png' },
+				{ id: 2, name: 'Top Esportivo Impacto', price: 89.90, img: '/img/top.png' },
+                { id: 3, name: 'Camiseta Dry Fit', price: 79.90, img: '/img/camisa.png' },
+                { id: 4, name: 'Shorts de Corrida', price: 99.90, img: '/img/short.png' },
+                //{ id: 5, name: 'Regata Machão', price: 69.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Regata' },
+                //{ id: 6, name: 'Jaqueta Corta-vento', price: 199.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Jaqueta' },
+                //{ id: 7, name: 'Meia de Compressão', price: 49.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Meia' },
+                //{ id: 8, name: 'Tênis de Treino', price: 349.90, img: 'https://placehold.co/400x400/f3e8ff/a855f7?text=Tênis' },
+            ];
+            let cart = [];
+
+            // --- SELECTORS ---
+            const productList = document.getElementById('product-list');
+            const cartButton = document.getElementById('cart-button');
+            const closeCartButton = document.getElementById('close-cart-button');
+            const cartModal = document.getElementById('cart-modal');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            const cartEmptyMessage = document.getElementById('cart-empty-message');
+            const checkoutButton = document.getElementById('checkout-button');
+            const paymentConfirmationModal = document.getElementById('payment-confirmation-modal');
+            const orderSummaryContainer = document.getElementById('order-summary');
+            const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+            const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
+
+
+            // --- FUNCTIONS ---
+
+            const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            const renderProducts = () => {
+                productList.innerHTML = '';
+                products.forEach(product => {
+                    productList.innerHTML += `
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                            <img src="${product.img}" alt="${product.name}" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">${product.name}</h3>
+                                <p class="text-gray-700 font-bold text-2xl mb-4">${formatCurrency(product.price)}</p>
+                                <button data-id="${product.id}" class="add-to-cart-btn w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                                    <i class="fas fa-cart-plus mr-2"></i> Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        </div>`;
+                });
+            };
+
+            const renderCart = () => {
+                cartItemsContainer.innerHTML = '';
+                cartEmptyMessage.classList.toggle('hidden', cart.length > 0);
+
+                cart.forEach(item => {
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.className = 'flex justify-between items-center mb-4 p-2 rounded-lg bg-violet-50 cart-item-enter';
+                    cartItemElement.innerHTML = `
+                        <div class="flex items-center">
+                            <img src="${item.img}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover mr-4">
+                            <div>
+                                <p class="font-semibold">${item.name}</p>
+                                <p class="text-gray-600">${formatCurrency(item.price)}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                           <div class="flex items-center border rounded">
+                                <button data-id="${item.id}" class="quantity-change decrease-btn px-2 py-1">-</button>
+                                <span class="px-2">${item.quantity}</span>
+                                <button data-id="${item.id}" class="quantity-change increase-btn px-2 py-1">+</button>
+                           </div>
+                            <button data-id="${item.id}" class="remove-from-cart-btn text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                        </div>`;
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
+                updateCartInfo();
+            };
+
+            const updateCartInfo = () => {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartCount.textContent = totalItems;
+                cartTotal.textContent = formatCurrency(totalPrice);
+            };
+
+            const addToCart = (productId) => {
+                const product = products.find(p => p.id === productId);
+                const cartItem = cart.find(item => item.id === productId);
+                if (cartItem) {
+                    cartItem.quantity++;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                renderCart();
+            };
+            
+            const removeFromCart = (productId) => {
+                cart = cart.filter(item => item.id !== productId);
+                renderCart();
+            };
+
+            const changeQuantity = (productId, change) => {
+                 const cartItem = cart.find(item => item.id === productId);
+                 if (cartItem) {
+                     cartItem.quantity += change;
+                     if (cartItem.quantity <= 0) removeFromCart(productId);
+                     else renderCart();
+                 }
+            };
+
+            const toggleCartModal = () => cartModal.classList.toggle('hidden');
+
+            const showToast = (message, isSuccess = true) => {
+                const toast = document.createElement('div');
+                const bgColor = isSuccess ? 'bg-green-500' : 'bg-red-500';
+                toast.className = `fixed top-5 right-5 ${bgColor} text-white py-2 px-4 rounded-lg shadow-lg toast-enter z-50`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => document.body.removeChild(toast), 3000);
+            };
+            
+            const processCheckout = () => {
+                if (cart.length === 0) {
+                    showToast("Seu carrinho está vazio!", false);
+                    return;
+                }
+                toggleCartModal();
+                let summaryHtml = '<ul class="space-y-2">';
+                cart.forEach(item => {
+                    summaryHtml += `<li class="flex justify-between"><span>${item.quantity}x ${item.name}</span> <span>${formatCurrency(item.price * item.quantity)}</span></li>`;
+                });
+                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                summaryHtml += `</ul><hr class="my-4"><div class="flex justify-between font-bold text-lg"><p>Total:</p><p>${formatCurrency(totalPrice)}</p></div>`;
+                orderSummaryContainer.innerHTML = summaryHtml;
+                paymentConfirmationModal.classList.remove('hidden');
+            };
+
+            const confirmPurchase = () => {
+                paymentConfirmationModal.classList.add('hidden');
+                cart = [];
+                renderCart();
+                showToast("Pedido recebido com sucesso!");
+            };
+
+            // --- EVENT LISTENERS ---
+            productList.addEventListener('click', e => {
+                if (e.target.closest('.add-to-cart-btn')) {
+                    addToCart(parseInt(e.target.closest('.add-to-cart-btn').dataset.id));
+                }
+            });
+
+            cartItemsContainer.addEventListener('click', e => {
+                const removeBtn = e.target.closest('.remove-from-cart-btn');
+                const quantityBtn = e.target.closest('.quantity-change');
+                if (removeBtn) removeFromCart(parseInt(removeBtn.dataset.id));
+                if (quantityBtn) {
+                    const change = quantityBtn.classList.contains('increase-btn') ? 1 : -1;
+                    changeQuantity(parseInt(quantityBtn.dataset.id), change);
+                }
+            });
+
+            cartButton.addEventListener('click', toggleCartModal);
+            closeCartButton.addEventListener('click', toggleCartModal);
+            cartModal.addEventListener('click', e => {
+                if (e.target === cartModal) toggleCartModal();
+            });
+            
+            checkoutButton.addEventListener('click', processCheckout);
+            confirmPaymentBtn.addEventListener('click', confirmPurchase);
+            cancelPaymentBtn.addEventListener('click', () => paymentConfirmationModal.classList.add('hidden'));
+
+            // --- INITIALIZATION ---
+            renderProducts();
+            getUsuarioLogado();
+        });
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        // Fetch com Redirecionamento em caso de sucesso
+        fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(this)))
+        }).then(res => {
+        if (res.ok) {
+            Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Login realizado com sucesso. Redirecionando...',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false
+            }).then(() => {
+                window.location.replace('/');
+            });
+        } else if (res.status == 401){
+            Swal.fire({ icon: 'alert', title: 'Falha', text: 'Cpf ou senha inválidos. Tente novamente.', confirmButtonColor: '#8B5CF6' });
+        } else {
+            Swal.fire({ icon: 'error', title: 'Erro no Servidor', text: 'Não foi possível realizar o login. Tente novamente.', confirmButtonColor: '#8B5CF6' });
+        }
+        }).catch(err => {
+            Swal.fire({ icon: 'error', title: 'Erro de Comunicação', text: 'Ocorreu um problema de rede. Verifique sua conexão.', confirmButtonColor: '#8B5CF6' });
+        });
+    });
+
+    document.getElementById("logoutForm").addEventListener("submit", async function (e) {
+         e.preventDefault();
+         const response = await fetch('/auth/logout');
+         if (response.status == 201) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Volte sempre. Redirecionando...',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false
+                }).then(() => {
+                    window.location.replace('/');
+                });
+        } else {
+             Swal.fire({ icon: 'error', title: 'Falha', text: 'Falha ao sair. Tente novamente.', confirmButtonColor: '#8B5CF6' });
+        }
+    });
+
+    async function getUsuarioLogado() {
+            const response = await fetch('/auth/usuario-logado');
+            const data = await response.json();
+            if (data.loggedIn) {
+               const mensagemBoasVindas = document.getElementById('boasvindas');
+                    if (mensagemBoasVindas) {
+                        mensagemBoasVindas.textContent = `Bem vindo(a), ${data.cliente.nome}!`;
+                        mensagemBoasVindas.hidden = false;
+                        sairBtn.hidden = false;
+                        loginBtn.hidden = true;
+                        cadastroBtn.hidden = true;
+                    }        
+            } else {
+                console.log('Nenhum usuário logado.');
+            }
+    }
+    
+    </script>
+</body>
+</html>

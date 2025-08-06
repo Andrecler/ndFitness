@@ -1,0 +1,19 @@
+{
+  "name": "cadastro-clientes-dnl",
+  "version": "1.0.0",
+  "description": "Cadastro de clientes com frontend em HTML e backend em Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.17.0",
+    "multer": "^2.0.2"
+  }
+}

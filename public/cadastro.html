@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro de Clientes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-slate-100">
+
+<section id="cadastro" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-3xl space-y-8">
+    <div class="bg-white p-8 md:p-10 rounded-xl shadow-xl">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-purple-800">Cadastro de Clientes</h2>
+        <p class="mt-2 text-sm text-gray-600">Preencha os dados para criar uma nova conta.</p>
+      </div>
+      <form id="cadastroForm" class="space-y-6">
+        <div>
+          <label for="nome" class="block text-sm font-medium text-gray-700">Nome Completo</label>
+          <input id="nome" name="nome" type="text" required class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="cpf" class="block text-sm font-medium text-gray-700">CPF</label>
+            <input id="cpf" name="cpf" type="text" onblur=validarCPF(this.value) required class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+          </div>
+          <div>
+            <label for="cep" class="block text-sm font-medium text-gray-700">CEP</label>
+            <input id="cep" name="cep" type="text" required class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+          </div>
+        </div>
+
+        <div>
+          <label for="endereco" class="block text-sm font-medium text-gray-700">Endereço</label>
+          <input id="endereco" name="endereco" type="text" required class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2">
+            <label for="complemento" class="block text-sm font-medium text-gray-700">Complemento</label>
+            <input id="complemento" name="complemento" type="text" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+          </div>
+          <div>
+            <label for="numero" class="block text-sm font-medium text-gray-700">Número</label>
+            <input id="numero" name="numero" type="text" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="telefone" class="block text-sm font-medium text-gray-700">Telefone</label>
+              <input id="telefone" name="telefone" type="tel" required class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+              <input id="email" name="email" type="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="senha" class="block text-sm font-medium text-gray-700">Senha</label>
+                <div class="mt-1 relative">
+                    <input id="senha" name="senha" type="password" required class="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+                    <button type="button" id="toggle-senha" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500">
+                        <svg id="eye-icon-1" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        <svg id="eye-slash-icon-1" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 .946-3.118 3.55-5.604 6.837-6.533m6.11 1.733A9.955 9.955 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.05 10.05 0 01-2.032 4.125m-4.433-4.125a3 3 0 11-4.243-4.243M1 1l22 22" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label for="confirmar-senha" class="block text-sm font-medium text-gray-700">Confirmar Senha</label>
+                <div class="mt-1 relative">
+                    <input id="confirmar-senha" name="confirmar-senha" type="password" required class="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600" />
+                    <button type="button" id="toggle-confirmar-senha" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500">
+                        <svg id="eye-icon-2" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        <svg id="eye-slash-icon-2" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 .946-3.118 3.55-5.604 6.837-6.533m6.11 1.733A9.955 9.955 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.05 10.05 0 01-2.032 4.125m-4.433-4.125a3 3 0 11-4.243-4.243M1 1l22 22" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-end gap-4 pt-4">
+            <button type="button" onclick="history.back()" class="px-6 py-2 text-sm font-semibold text-gray-700 bg-transparent border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all">
+                Voltar
+            </button>
+            <button type="submit" class="px-6 py-2 text-sm font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all">
+                Cadastrar
+            </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.4.2/imask.min.js"></script>
+<script>
+  // Máscaras para campos
+  const cpfMask = IMask(document.getElementById("cpf"), { mask: "000.000.000-00" });
+  const cepMask = IMask(document.getElementById("cep"), { mask: "00000-000" });
+  const telefoneMask = IMask(document.getElementById("telefone"), {
+    mask: [{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }]
+  });
+
+  // Consulta ViaCEP
+  document.getElementById("cep").addEventListener("blur", function () {
+    const cep = this.value.replace(/\D/g, "");
+    if (cep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.erro) {
+            document.getElementById("endereco").value = `${data.logradouro} - ${data.bairro}, ${data.localidade} - ${data.uf}`;
+          } else {
+            Swal.fire({ icon: 'error', title: 'CEP Inválido', text: 'O CEP informado não foi encontrado.', confirmButtonColor: '#8B5CF6' });
+          }
+        })
+        .catch(() => Swal.fire({ icon: 'error', title: 'Erro de Rede', text: 'Não foi possível buscar o CEP.', confirmButtonColor: '#8B5CF6' }));
+    }
+  });
+
+    function validarCPF(cpf) {
+      
+      // 1. Remove caracteres não numéricos (pontos, traços, etc.)
+      const cpfLimpo = String(cpf).replace(/[^\d]/g, '');
+      var valido = true;
+
+      // 2. Verifica se o CPF tem 11 dígitos
+      if (cpfLimpo.length !== 11) {
+        valido = false;
+      }
+
+      // 3. Verifica se todos os dígitos são iguais (ex: 111.111.111-11), o que é inválido
+      if (/^(\d)\1{10}$/.test(cpfLimpo)) {
+        console.log(cpfLimpo);
+        valido = false;
+      }
+
+      // --- Cálculo do 1º Dígito Verificador ---
+      let soma = 0;
+      for (let i = 0; i < 9; i++) {
+        soma += parseInt(cpfLimpo.charAt(i)) * (10 - i);
+      }
+    
+      let resto = 11 - (soma % 11);
+      let primeiroDigitoVerificador = (resto === 10 || resto === 11) ? 0 : resto;
+
+      // 4. Verifica se o 1º dígito verificador está correto
+      if (primeiroDigitoVerificador !== parseInt(cpfLimpo.charAt(9))) {
+       valido = false;
+      }
+
+      // --- Cálculo do 2º Dígito Verificador ---
+      soma = 0; // Zera a soma para o próximo cálculo
+      for (let i = 0; i < 10; i++) {
+        soma += parseInt(cpfLimpo.charAt(i)) * (11 - i);
+      }
+
+      resto = 11 - (soma % 11);
+      let segundoDigitoVerificador = (resto === 10 || resto === 11) ? 0 : resto;
+    
+      // 5. Verifica se o 2º dígito verificador está correto
+      if (segundoDigitoVerificador !== parseInt(cpfLimpo.charAt(10))) {
+       valido = false;
+      }
+
+     if(!valido && cpfLimpo.length > 1){
+        Swal.fire({ icon: 'error', title: 'Erro de Validação', text: 'CPF inválido!', confirmButtonColor: '#8B5CF6' });
+        return; 
+     }
+  }
+
+  // Lógica para Visualização de Senha
+  function setupPasswordToggle(inputId, toggleButtonId, eyeIconId, eyeSlashIconId) {
+      const passwordInput = document.getElementById(inputId);
+      const toggleButton = document.getElementById(toggleButtonId);
+      const eyeIcon = document.getElementById(eyeIconId);
+      const eyeSlashIcon = document.getElementById(eyeSlashIconId);
+      toggleButton.addEventListener('click', () => {
+          if (passwordInput.type === 'password') {
+              passwordInput.type = 'text';
+              eyeIcon.classList.add('hidden');
+              eyeSlashIcon.classList.remove('hidden');
+          } else {
+              passwordInput.type = 'password';
+              eyeIcon.classList.remove('hidden');
+              eyeSlashIcon.classList.add('hidden');
+          }
+      });
+  }
+  setupPasswordToggle('senha', 'toggle-senha', 'eye-icon-1', 'eye-slash-icon-1');
+  setupPasswordToggle('confirmar-senha', 'toggle-confirmar-senha', 'eye-icon-2', 'eye-slash-icon-2');
+
+  // Submissão do Formulário com Validação de Senha e Redirecionamento
+  document.getElementById("cadastroForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Validação de Senha
+    const senha = document.getElementById('senha').value;
+    const confirmarSenha = document.getElementById('confirmar-senha').value;
+    
+    if (senha !== confirmarSenha) {
+        Swal.fire({ icon: 'error', title: 'Erro de Validação', text: 'As senhas não coincidem!', confirmButtonColor: '#8B5CF6' });
+        return; 
+    }
+    if (senha.length < 4 || senha.length > 8) {
+        Swal.fire({ icon: 'error', title: 'Erro de Validação', text: 'A senha deve ter entre 4 e 8 caracteres.', confirmButtonColor: '#8B5CF6' });
+        return; 
+    }
+    if (!/[A-Z]/.test(senha)) {
+        Swal.fire({ icon: 'error', title: 'Erro de Validação', text: 'A senha deve conter pelo menos uma letra maiúscula.', confirmButtonColor: '#8B5CF6' });
+        return; 
+    }
+    if (!/^[a-zA-Z0-9]+$/.test(senha)) {
+        Swal.fire({ icon: 'error', title: 'Erro de Validação', text: 'A senha não pode conter caracteres especiais.', confirmButtonColor: '#8B5CF6' });
+        return; 
+    }
+    
+    // Fetch com Redirecionamento em caso de sucesso
+    fetch('/cadastro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(this)))
+    }).then(res => {
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso!',
+          text: 'Cliente cadastrado com sucesso. Redirecionando...',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.replace('/');
+        });
+      } else {
+        Swal.fire({ icon: 'error', title: 'Erro no Servidor', text: 'Não foi possível cadastrar o cliente. Tente novamente.', confirmButtonColor: '#8B5CF6' });
+      }
+    }).catch(err => {
+        Swal.fire({ icon: 'error', title: 'Erro de Comunicação', text: 'Ocorreu um problema de rede. Verifique sua conexão.', confirmButtonColor: '#8B5CF6' });
+    });
+  });
+</script>
+
+</body>
+</html>
